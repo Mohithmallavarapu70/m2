@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Project Insight | AI-Powered Customer Intelligence Platform</title>
+    <!-- Google Fonts + Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: radial-gradient(circle at 10% 20%, #0B1120, #030617);
+            color: #EFF3FF;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        /* custom scroll */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0F172A;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #3B82F6;
+            border-radius: 8px;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 32px;
+        }
+
+        /* Glassmorphic reusable */
+        .glass-card {
+            background: rgba(15, 23, 42, 0.55);
+            backdrop-filter: blur(12px);
+            border-radius: 32px;
+            border: 1px solid rgba(59, 130, 246, 0.25);
+            transition: transform 0.2s ease, border-color 0.2s;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(59, 130, 246, 0.6);
+            transform: translateY(-4px);
+        }
+
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(105deg, #3B82F6, #2563EB);
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 12px 28px;
+            border-radius: 40px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 8px 20px rgba(59,130,246,0.3);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.02);
+            background: linear-gradient(105deg, #2563EB, #1D4ED8);
+            box-shadow: 0 12px 28px rgba(59,130,246,0.5);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid rgba(59, 130, 246, 0.7);
+            color: white;
+            font-weight: 500;
+            padding: 10px 24px;
+            border-radius: 40px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .btn-outline:hover {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: #3B82F6;
+        }
+
+        /* Nav */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #FFFFFF, #93C5FD);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.02em;
+        }
+
+        .logo span {
+            background: none;
+            -webkit-background-clip: unset;
+            color: #3B82F6;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 28px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #CBD5E1;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        /* Hero */
+        .hero {
+            padding: 60px 0 40px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3.6rem;
+            font-weight: 800;
+            line-height: 1.2;
+            background: linear-gradient(to right, #F0F9FF, #A5D8FF);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 24px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #A0AEC0;
+            max-width: 680px;
+            margin: 0 auto 32px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 18px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* stats row */
+        .stats-row {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            flex-wrap: wrap;
+            margin: 64px 0 40px;
+            text-align: center;
+        }
+
+        .stat-item h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #3B82F6;
+        }
+
+        .stat-item p {
+            color: #94A3B8;
+            font-weight: 500;
+        }
+
+        /* section headers */
+        .section-header {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .section-header h2 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+            background: linear-gradient(145deg, #E2E8F0, #B9D0F0);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .section-header p {
+            color: #8192B0;
+            max-width: 600px;
+            margin: 12px auto 0;
+        }
+
+        /* features grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 28px;
+            margin-bottom: 80px;
+        }
+
+        .feature-card {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(8px);
+            border-radius: 28px;
+            padding: 28px 20px;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            transition: all 0.25s;
+        }
+
+        .feature-card i {
+            font-size: 2.2rem;
+            color: #3B82F6;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            color: #B9C7DA;
+            line-height: 1.5;
+        }
+
+        /* AI Dashboard section */
+        .dashboard-section {
+            background: rgba(2, 6, 23, 0.5);
+            border-radius: 48px;
+            padding: 40px 32px;
+            margin: 40px 0 70px;
+            border: 1px solid rgba(59,130,246,0.3);
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.5);
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+        }
+
+        .segment-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .segment-btn {
+            background: rgba(30, 41, 59, 0.8);
+            border: none;
+            padding: 8px 18px;
+            border-radius: 60px;
+            color: #CBD5E1;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.85rem;
+        }
+
+        .segment-btn.active {
+            background: #3B82F6;
+            color: white;
+            box-shadow: 0 4px 12px rgba(59,130,246,0.4);
+        }
+
+        .segment-btn:hover:not(.active) {
+            background: #334155;
+            color: #F1F5F9;
+        }
+
+        .chart-container {
+            margin: 20px 0 10px;
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 28px;
+            padding: 20px;
+        }
+
+        canvas {
+            max-height: 340px;
+            width: 100%;
+        }
+
+        .insight-note {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #7E8AAE;
+            background: rgba(59,130,246,0.1);
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 40px;
+            backdrop-filter: blur(4px);
+        }
+
+        /* how it works */
+        .steps {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 32px;
+            margin: 50px 0 70px;
+        }
+
+        .step {
+            background: rgba(15, 23, 42, 0.45);
+            backdrop-filter: blur(8px);
+            padding: 30px 22px;
+            border-radius: 28px;
+            flex: 1;
+            min-width: 220px;
+            text-align: center;
+            border: 1px solid rgba(59,130,246,0.2);
+        }
+
+        .step .step-num {
+            background: #3B82F6;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            border-radius: 60px;
+            font-weight: 800;
+            font-size: 1.5rem;
+        }
+
+        /* testimonial */
+        .testimonial {
+            background: linear-gradient(125deg, #0B1120, #0F172A);
+            border-radius: 40px;
+            padding: 48px 36px;
+            margin: 40px 0 60px;
+            text-align: center;
+            border: 1px solid #2D3A5E;
+        }
+
+        .testimonial i {
+            font-size: 2.5rem;
+            color: #3B82F6;
+            opacity: 0.7;
+        }
+
+        .testimonial p {
+            font-size: 1.3rem;
+            font-weight: 500;
+            max-width: 800px;
+            margin: 20px auto;
+            color: #E2E8F0;
+        }
+
+        .testimonial h4 {
+            font-weight: 600;
+            color: #A5D8FF;
+        }
+
+        /* CTA */
+        .cta-section {
+            background: linear-gradient(115deg, #1E2A4A, #0F172A);
+            border-radius: 48px;
+            padding: 52px 32px;
+            text-align: center;
+            margin: 30px 0 60px;
+        }
+
+        .cta-section h2 {
+            font-size: 2rem;
+            margin-bottom: 12px;
+        }
+
+        /* footer */
+        footer {
+            border-top: 1px solid rgba(59,130,246,0.2);
+            padding: 32px 0 40px;
+            margin-top: 20px;
+            text-align: center;
+            color: #7F8EA3;
+        }
+
+        @media (max-width: 780px) {
+            .container {
+                padding: 0 20px;
+            }
+            .hero h1 {
+                font-size: 2.4rem;
+            }
+            .section-header h2 {
+                font-size: 1.9rem;
+            }
+            .dashboard-header {
+                flex-direction: column;
+                gap: 18px;
+                align-items: flex-start;
+            }
+        }
+        @media (max-width: 480px) {
+            .btn-primary, .btn-outline {
+                padding: 8px 20px;
+                font-size: 0.85rem;
+            }
+            .stats-row {
+                gap: 24px;
+            }
+        }
+        .fade-up {
+            animation: fadeUp 0.6s ease-out;
+        }
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Navbar -->
+        <nav class="navbar">
+            <div class="logo">Project <span>Insight</span></div>
+            <div class="nav-links">
+                <a href="#">Platform</a>
+                <a href="#">Solutions</a>
+                <a href="#">AI Labs</a>
+                <a href="#">Enterprise</a>
+                <a href="#" class="btn-outline" style="padding: 6px 20px;">Contact</a>
+            </div>
+        </nav>
+
+        <!-- Hero -->
+        <section class="hero fade-up">
+            <h1>Decode what’s next.<br>AI‑Powered Customer Intelligence.</h1>
+            <p>Project Insight unifies behavioral signals, sentiment, and predictive models — delivering real-time customer intelligence that drives retention, LTV, and hyper-personalization.</p>
+            <div class="hero-buttons">
+                <button class="btn-primary"><i class="fas fa-arrow-right"></i> Request Demo</button>
+                <button class="btn-outline"><i class="fas fa-play"></i> Watch AI Demo</button>
+            </div>
+        </section>
+
+        <!-- Stats -->
+        <div class="stats-row">
+            <div class="stat-item"><h3>500+</h3><p>Global Enterprises</p></div>
+            <div class="stat-item"><h3>98.3%</h3><p>Prediction Accuracy</p></div>
+            <div class="stat-item"><h3>4.2x</h3><p>ROI on Personalization</p></div>
+            <div class="stat-item"><h3>24/7</h3><p>Real‑Time Insights</p></div>
+        </div>
+
+        <!-- Features Grid -->
+        <div class="section-header">
+            <h2>Intelligence Engineered for Growth</h2>
+            <p>From raw signals to predictive actions — all in one platform.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <i class="fas fa-chart-line"></i>
+                <h3>Predictive Scoring</h3>
+                <p>Anticipate churn, CLV, and next-purchase with deep learning models.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-voice"></i>
+                <h3>Sentiment AI</h3>
+                <p>Real‑time NLP across support tickets, reviews, and social conversations.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-users-viewfinder"></i>
+                <h3>360° Customer View</h3>
+                <p>Unify every touchpoint into dynamic behavioral profiles.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-bolt"></i>
+                <h3>Actionable Journeys</h3>
+                <p>Auto‑trigger smart campaigns with AI‑driven recommendations.</p>
+            </div>
+        </div>
+
+        <!-- Live AI Dashboard Section (Interactive Chart) -->
+        <div class="dashboard-section">
+            <div class="dashboard-header">
+                <div>
+                    <h2 style="font-size: 1.8rem; margin-bottom: 6px;"><i class="fas fa-microchip"></i> Live AI Intelligence Lab</h2>
+                    <p style="color:#99B4E0;">Simulated real-time customer engagement index — segment powered predictions</p>
+                </div>
+                <div class="segment-buttons" id="segmentGroup">
+                    <button data-segment="all" class="segment-btn active">📊 All Customers</button>
+                    <button data-segment="premium" class="segment-btn">💎 Premium Segment</button>
+                    <button data-segment="new" class="segment-btn">🌟 New Users</button>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="insightChart" width="800" height="350" style="width:100%; height:auto; max-height: 330px;"></canvas>
+            </div>
+            <div style="display: flex; justify-content: center;">
+                <div class="insight-note">
+                    <i class="fas fa-brain"></i> AI insight: Model predicts <span id="dynamicInsight">+12% engagement lift</span> for high-value clusters.
+                </div>
+            </div>
+        </div>
+
+        <!-- How It Works -->
+        <div class="section-header">
+            <h2>Powered by Insight AI Core</h2>
+            <p>From raw data to predictive intelligence in three steps</p>
+        </div>
+        <div class="steps">
+            <div class="step"><div class="step-num">1</div><h3>Connect</h3><p>Integrate CRM, support, product analytics in minutes.</p></div>
+            <div class="step"><div class="step-num">2</div><h3>Train & Model</h3><p>Custom AI models trained on your customer DNA.</p></div>
+            <div class="step"><div class="step-num">3</div><h3>Activate</h3><p>Real-time dashboards, alerts, and orchestration.</p></div>
+        </div>
+
+        <!-- Testimonial -->
+        <div class="testimonial">
+            <i class="fas fa-quote-right"></i>
+            <p>“Project Insight gave us a unified view of customer intent across 14 data sources. We increased retention by 34% in 6 months and reduced churn prediction errors by 45%. Absolutely game‑changing.”</p>
+            <h4>— Elena Voss, CPO at Nexa Retail</h4>
+        </div>
+
+        <!-- Call to Action -->
+        <div class="cta-section">
+            <h2>Ready to put AI to work for your customer intelligence?</h2>
+            <p style="margin-bottom: 28px;">Join the leaders using Project Insight to unlock hidden growth.</p>
+            <button class="btn-primary" style="background: linear-gradient(135deg, #3B82F6, #7C3AED);"><i class="fas fa-chalkboard-user"></i> Start Free Trial</button>
+            <button class="btn-outline" style="margin-left: 16px;">Talk to AI experts</button>
+        </div>
+
+        <footer>
+            <p>© 2025 Project Insight — AI Customer Intelligence Platform | <i class="fas fa-shield-alt"></i> Enterprise-ready & GDPR compliant</p>
+        </footer>
+    </div>
+
+    <script>
+        // Chart Initialization & Dynamic Segment Updates
+        const ctx = document.getElementById('insightChart').getContext('2d');
+        
+        // dataset mapping for different segments (Customer Engagement Index 0-100)
+        const dataSets = {
+            all: [64, 70, 68, 75, 82, 88],
+            premium: [85, 87, 84, 89, 92, 95],
+            new: [40, 55, 62, 70, 78, 85]
+        };
+
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+        
+        // insights text dynamic mapping
+        const insightText = {
+            all: 'AI insight: Steady upward trend — average engagement +12% over 2 quarters.',
+            premium: 'AI insight: Premium segment shows peak loyalty & retention potential ↗️ 95 index.',
+            new: 'AI insight: New user adoption rising fast; 85% activation rate predicted next month.'
+        };
+
+        let currentSegment = 'all';
+        let chart;
+
+        // chart configuration
+        function createChart(dataValues, segmentKey) {
+            if (chart) {
+                chart.destroy();
+            }
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: months,
+                    datasets: [
+                        {
+                            label: 'Customer Engagement Index (AI‑predicted)',
+                            data: dataValues,
+                            borderColor: '#3B82F6',
+                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                            borderWidth: 3,
+                            pointBackgroundColor: '#60A5FA',
+                            pointBorderColor: '#0F172A',
+                            pointRadius: 5,
+                            pointHoverRadius: 8,
+                            tension: 0.3,
+                            fill: true,
+                            pointStyle: 'circle'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        tooltip: { backgroundColor: '#111827', titleColor: '#E2E8F0', bodyColor: '#94A3B8' },
+                        legend: { labels: { color: '#CBD5E1', font: { weight: '500' } } }
+                    },
+                    scales: {
+                        y: {
+                            min: 20,
+                            max: 100,
+                            grid: { color: 'rgba(59,130,246,0.15)' },
+                            title: { display: true, text: 'Engagement Score', color: '#A0B4D7' },
+                            ticks: { color: '#A0B4D7' }
+                        },
+                        x: {
+                            grid: { color: 'rgba(59,130,246,0.1)' },
+                            ticks: { color: '#B9C9F0' }
+                        }
+                    },
+                    elements: { line: { borderJoin: 'round' } }
+                }
+            });
+            // update insight note text
+            const insightSpan = document.getElementById('dynamicInsight');
+            if (insightSpan) insightSpan.innerText = insightText[segmentKey] || insightText.all;
+        }
+
+        // initial chart load (All Customers)
+        createChart(dataSets.all, 'all');
+
+        // segment switching logic
+        const segButtons = document.querySelectorAll('.segment-btn');
+        function setActiveSegment(segmentId) {
+            segButtons.forEach(btn => {
+                const btnSeg = btn.getAttribute('data-segment');
+                if (btnSeg === segmentId) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+
+        segButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const segment = btn.getAttribute('data-segment');
+                if (segment === currentSegment) return;
+                currentSegment = segment;
+                let newData = [];
+                let newInsightKey = '';
+                if (segment === 'all') {
+                    newData = dataSets.all;
+                    newInsightKey = 'all';
+                } else if (segment === 'premium') {
+                    newData = dataSets.premium;
+                    newInsightKey = 'premium';
+                } else if (segment === 'new') {
+                    newData = dataSets.new;
+                    newInsightKey = 'new';
+                }
+                // update chart data smoothly
+                if (chart) {
+                    chart.data.datasets[0].data = newData;
+                    chart.update();
+                } else {
+                    createChart(newData, newInsightKey);
+                }
+                // update insight text
+                const insightSpan = document.getElementById('dynamicInsight');
+                if (insightSpan) insightSpan.innerText = insightText[newInsightKey] || insightText.all;
+                setActiveSegment(segment);
+                // subtle micro-interaction
+                const dashboard = document.querySelector('.dashboard-section');
+                dashboard.style.transition = 'all 0.1s';
+                dashboard.style.transform = 'scale(0.99)';
+                setTimeout(() => { dashboard.style.transform = 'scale(1)'; }, 120);
+            });
+        });
+
+        // Optional: Buttons interactions for hero (demo alert)
+        const demoBtn = document.querySelector('.hero-buttons .btn-primary');
+        const watchBtn = document.querySelector('.hero-buttons .btn-outline');
+        if (demoBtn) {
+            demoBtn.addEventListener('click', () => {
+                alert('🚀 Project Insight demo experience: Explore real-time AI intelligence. (Sandbox ready)');
+            });
+        }
+        if (watchBtn) {
+            watchBtn.addEventListener('click', () => {
+                alert('▶️ AI product walkthrough: See how insights turn into retention lift — interactive preview available.');
+            });
+        }
+        // CTA additional click handlers
+        const ctaTrial = document.querySelector('.cta-section .btn-primary');
+        if (ctaTrial) {
+            ctaTrial.addEventListener('click', () => {
+                alert('✨ Start your 14-day free trial. No credit card required — explore full AI suite.');
+            });
+        }
+        const talkBtn = document.querySelector('.cta-section .btn-outline');
+        if (talkBtn) {
+            talkBtn.addEventListener('click', () => {
+                alert('📞 Our AI experts will reach out within 24h to craft your customer intelligence roadmap.');
+            });
+        }
+    </script>
+</body>
+</html>
